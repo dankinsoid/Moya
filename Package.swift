@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.0.0")),
-				.package(url: "https://github.com/dankinsoid/CombineOperators.git", .upToNextMajor(from: "1.38.0")), // dev
+				.package(url: "https://github.com/dankinsoid/CombineOperators.git", .upToNextMajor(from: "1.40.0")), // dev
     ],
     targets: [
         .target(name: "Moya", dependencies: ["Alamofire"]),

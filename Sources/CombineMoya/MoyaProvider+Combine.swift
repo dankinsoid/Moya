@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import CombineCocoa
+import CombineOperators
 #if !COCOAPODS
 import Moya
 #endif
@@ -15,19 +16,17 @@ public extension Reactive where Base: MoyaProviderType {
     ///   - token: Entity, which provides specifications necessary for a `MoyaProvider`.
     ///   - callbackQueue: Callback queue. If nil - queue from provider initializer will be used.
     /// - Returns: Single response object.
-    func request(_ token: Base.Target, callbackQueue: DispatchQueue? = nil) -> AnyPublisher<Response, MoyaError> {
+    func request(_ token: Base.Target, callbackQueue: DispatchQueue? = nil) -> Single<Response, MoyaError> {
 			let owner = Owner()
-			return Deferred { [weak base] in
-				Future { promise in
+			return Single { [weak base] promise in
 					if !owner.isCancelled {
 						owner.value = base?.request(token, callbackQueue: callbackQueue, progress: nil, completion: promise)
 					}
-				}.onCancel {
+				} onCancel: {
 					owner.value?.cancel()
 					owner.isCancelled = true
 					owner.value = nil
 				}
-			}.any()
     }
 
     /// Designated request-making method with progress.
