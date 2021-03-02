@@ -34,7 +34,7 @@ extension Request: RequestType {
 public typealias RequestInterceptor = Alamofire.RequestInterceptor
 
 /// Internal token that can be used to cancel requests
-public final class CancellableToken: Cancellable, CustomDebugStringConvertible {
+public final class MoyaCancellableToken: MoyaCancellable, CustomDebugStringConvertible {
     let cancelAction: () -> Void
     let request: Request?
 

@@ -1,24 +1,23 @@
 /// Protocol to define the opaque type returned from a request.
-public protocol Cancellable {
+import Combine
+
+public protocol MoyaCancellable: Cancellable {
 
     /// A Boolean value stating whether a request is cancelled.
     var isCancelled: Bool { get }
-
-    /// Cancels the represented request.
-    func cancel()
 }
 
-internal class CancellableWrapper: Cancellable {
-    internal var innerCancellable: Cancellable = SimpleCancellable()
+internal class MoyaCancellableWrapper: MoyaCancellable {
+    internal var innerMoyaCancellable: MoyaCancellable = SimpleMoyaCancellable()
 
-    var isCancelled: Bool { return innerCancellable.isCancelled }
+    var isCancelled: Bool { return innerMoyaCancellable.isCancelled }
 
     internal func cancel() {
-        innerCancellable.cancel()
+        innerMoyaCancellable.cancel()
     }
 }
 
-internal class SimpleCancellable: Cancellable {
+internal class SimpleMoyaCancellable: MoyaCancellable {
     var isCancelled = false
     func cancel() {
         isCancelled = true

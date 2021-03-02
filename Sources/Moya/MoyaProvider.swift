@@ -46,8 +46,8 @@ public protocol MoyaProviderType: AnyObject {
 
     associatedtype Target: TargetType
 
-    /// Designated request-making method. Returns a `Cancellable` token to cancel the request later.
-    func request(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> Cancellable
+    /// Designated request-making method. Returns a `MoyaCancellable` token to cancel the request later.
+    func request(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> MoyaCancellable
 }
 
 /// Request provider class. Requests should be made through this class only.
@@ -113,12 +113,12 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
         return endpointClosure(token)
     }
 
-    /// Designated request-making method. Returns a `Cancellable` token to cancel the request later.
+    /// Designated request-making method. Returns a `MoyaCancellable` token to cancel the request later.
     @discardableResult
     open func request(_ target: Target,
                       callbackQueue: DispatchQueue? = .none,
                       progress: ProgressBlock? = .none,
-                      completion: @escaping Completion) -> Cancellable {
+                      completion: @escaping Completion) -> MoyaCancellable {
 
         let callbackQueue = callbackQueue ?? self.callbackQueue
         return requestNormal(target, callbackQueue: callbackQueue, progress: progress, completion: completion)
@@ -129,12 +129,12 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
     /// and then use the returned `URLRequest` in the `createStubFunction` method.
     /// Note: this was previously in an extension, however it must be in the original class declaration to allow subclasses to override.
     @discardableResult
-    open func stubRequest(_ target: Target, request: URLRequest, callbackQueue: DispatchQueue?, completion: @escaping Moya.Completion, endpoint: Endpoint, stubBehavior: Moya.StubBehavior) -> CancellableToken {
+    open func stubRequest(_ target: Target, request: URLRequest, callbackQueue: DispatchQueue?, completion: @escaping Moya.Completion, endpoint: Endpoint, stubBehavior: Moya.StubBehavior) -> MoyaCancellableToken {
         let callbackQueue = callbackQueue ?? self.callbackQueue
-        let cancellableToken = CancellableToken { }
+        let MoyaCancellableToken = MoyaCancellableToken { }
         let preparedRequest = notifyPluginsOfImpendingStub(for: request, target: target)
         let plugins = self.plugins
-        let stub: () -> Void = createStubFunction(cancellableToken, forTarget: target, withCompletion: completion, endpoint: endpoint, plugins: plugins, request: preparedRequest)
+        let stub: () -> Void = createStubFunction(MoyaCancellableToken, forTarget: target, withCompletion: completion, endpoint: endpoint, plugins: plugins, request: preparedRequest)
         switch stubBehavior {
         case .immediate:
             switch callbackQueue {
@@ -153,7 +153,7 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
             fatalError("Method called to stub request when stubbing is disabled.")
         }
 
-        return cancellableToken
+        return MoyaCancellableToken
     }
     // swiftlint:enable function_parameter_count
 }

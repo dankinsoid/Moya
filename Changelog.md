@@ -283,7 +283,7 @@
 
 # [8.0.0-beta.5] - 2016-11-29
 ### Changed
-- **Breaking Change** Renamed `cancelled` in the `Cancellable` protocol to `isCancelled`.
+- **Breaking Change** Renamed `cancelled` in the `MoyaCancellable` protocol to `isCancelled`.
 - **Breaking Change** Renamed `URL` in `Endpoint` to `url`.
 - **Breaking Change** Renamed `StructTarget` to `MultiTarget`.
 - Demo project has been updated with new DemoMultiTarget target, new project
@@ -380,7 +380,7 @@
 
 ### Fixed
 - Fixes a xcodeproj referencing bug introduced by the new cURL-based logging plugin.
-- Calls completion even when cancellable token is canceled
+- Calls completion even when MoyaCancellable token is canceled
 
 # [6.5.0] - 2016-05-26
 ### Added
@@ -516,7 +516,7 @@
 
 # [4.0.2] - 2015-10-23
 ### Added
-- CancellableTokens can now debug print the requests cURL.
+- MoyaCancellableTokens can now debug print the requests cURL.
 
 # [4.0.1] - 2015-10-13
 ### Changed
@@ -644,7 +644,7 @@
 
 # [0.7.1] - 2015-05-27
 ### Added
-- Adds cancellable requests -[@MichaelMcGuire](http://github.com/MichaelMcGuire)
+- Adds MoyaCancellable requests -[@MichaelMcGuire](http://github.com/MichaelMcGuire)
 
 # [0.7.0] - 2015-04-27
 ### Added

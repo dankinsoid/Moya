@@ -70,11 +70,11 @@ final class MoyaProviderSpec: QuickSpec {
             expect(urlRequest1).to(equal(urlRequest2))
         }
 
-        it("returns a cancellable object when a request is made") {
+        it("returns a MoyaCancellable object when a request is made") {
             let target: GitHub = .userProfile("ashfurrow")
-            let cancellable: Cancellable = provider.request(target) { _ in  }
+            let MoyaCancellable: MoyaCancellable = provider.request(target) { _ in  }
 
-            expect(cancellable).toNot(beNil())
+            expect(MoyaCancellable).toNot(beNil())
         }
 
         it("uses a custom session by default, startRequestsImmediately should be false") {
@@ -703,7 +703,7 @@ final class MoyaProviderSpec: QuickSpec {
                         expect(receivedResponse).to( beIdenticalToResponse(response) )
                     }
                     expect(provider.inflightRequests.count).to( equal(1) )
-                } as! CancellableWrapper
+                } as! MoyaCancellableWrapper
 
                 // Allow for network request to complete
                 expect(provider.inflightRequests.count).toEventually( equal(0) )
@@ -711,7 +711,7 @@ final class MoyaProviderSpec: QuickSpec {
             }
         }
 
-        describe("the cancellable token") {
+        describe("the MoyaCancellable token") {
             var provider: MoyaProvider<GitHub>!
 
             beforeEach {
@@ -721,13 +721,13 @@ final class MoyaProviderSpec: QuickSpec {
             it("invokes completion and returns. Failure if canceled immediately") {
                 var error: MoyaError?
                 waitUntil { done in
-                    let cancellable = provider.request(.zen, completion: { (result) in
+                    let MoyaCancellable = provider.request(.zen, completion: { (result) in
                         if case let .failure(err) = result {
                             error = err
                         }
                         done()
                     })
-                    cancellable.cancel()
+                    MoyaCancellable.cancel()
                 }
 
                 expect(error).toNot(beNil())

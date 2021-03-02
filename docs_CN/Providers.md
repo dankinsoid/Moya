@@ -14,7 +14,7 @@ provider.request(.zen) { result in
 }
 ```
 
-到此完毕! `request()` 方法返回一个 `Cancellable` ，它只有 `cancel()` 这个公开的方法，你可以通过调用这个方法来取消请求。更多关于 `Result` 的信息查看 [Examples](Examples) 
+到此完毕! `request()` 方法返回一个 `MoyaCancellable` ，它只有 `cancel()` 这个公开的方法，你可以通过调用这个方法来取消请求。更多关于 `Result` 的信息查看 [Examples](Examples) 
 
 记住,  把 `target` 和 `provider` 放在*哪儿*完全取决于你自己。你可以查看 [Artsy的实现](https://github.com/artsy/eidolon/blob/master/Kiosk/App/Networking/ArtsyAPI.swift) 的例子.
 
