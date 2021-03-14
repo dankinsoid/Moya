@@ -22,7 +22,7 @@ public extension MoyaProvider {
     func requestNormal(_ target: Target, callbackQueue: DispatchQueue?, progress: Moya.ProgressBlock?, completion: @escaping Moya.Completion) -> MoyaCancellable {
         let endpoint = self.endpoint(target)
         let stubBehavior = self.stubClosure(target)
-        let MoyaCancellableToken = MoyaCancellableWrapper()
+        let moyaCancellableToken = MoyaCancellableWrapper()
 
         // Allow plugins to modify response
         let pluginsWithCompletion: Moya.Completion = { result in
@@ -38,7 +38,7 @@ public extension MoyaProvider {
             lock.unlock()
 
             if inflightCompletionBlocks != nil {
-                return MoyaCancellableToken
+                return moyaCancellableToken
             } else {
                 lock.lock()
                 self.inflightRequests[endpoint] = [pluginsWithCompletion]
@@ -47,7 +47,7 @@ public extension MoyaProvider {
         }
 
         let performNetworking = { (requestResult: Result<URLRequest, MoyaError>) in
-            if MoyaCancellableToken.isCancelled {
+            if moyaCancellableToken.isCancelled {
                 self.cancelCompletion(pluginsWithCompletion, target: target)
                 return
             }
@@ -74,12 +74,12 @@ public extension MoyaProvider {
               }
             }
 
-            MoyaCancellableToken.innerMoyaCancellable = self.performRequest(target, request: request, callbackQueue: callbackQueue, progress: progress, completion: networkCompletion, endpoint: endpoint, stubBehavior: stubBehavior)
+            moyaCancellableToken.innerMoyaCancellable = self.performRequest(target, request: request, callbackQueue: callbackQueue, progress: progress, completion: networkCompletion, endpoint: endpoint, stubBehavior: stubBehavior)
         }
 
         requestClosure(endpoint, performNetworking)
 
-        return MoyaCancellableToken
+        return moyaCancellableToken
     }
 
     // swiftlint:disable:next function_parameter_count

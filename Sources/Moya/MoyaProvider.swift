@@ -131,10 +131,10 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
     @discardableResult
     open func stubRequest(_ target: Target, request: URLRequest, callbackQueue: DispatchQueue?, completion: @escaping Moya.Completion, endpoint: Endpoint, stubBehavior: Moya.StubBehavior) -> MoyaCancellableToken {
         let callbackQueue = callbackQueue ?? self.callbackQueue
-        let MoyaCancellableToken = MoyaCancellableToken { }
+        let moyaCancellableToken = MoyaCancellableToken { }
         let preparedRequest = notifyPluginsOfImpendingStub(for: request, target: target)
         let plugins = self.plugins
-        let stub: () -> Void = createStubFunction(MoyaCancellableToken, forTarget: target, withCompletion: completion, endpoint: endpoint, plugins: plugins, request: preparedRequest)
+        let stub: () -> Void = createStubFunction(moyaCancellableToken, forTarget: target, withCompletion: completion, endpoint: endpoint, plugins: plugins, request: preparedRequest)
         switch stubBehavior {
         case .immediate:
             switch callbackQueue {
@@ -153,7 +153,7 @@ open class MoyaProvider<Target: TargetType>: MoyaProviderType {
             fatalError("Method called to stub request when stubbing is disabled.")
         }
 
-        return MoyaCancellableToken
+        return moyaCancellableToken
     }
     // swiftlint:enable function_parameter_count
 }

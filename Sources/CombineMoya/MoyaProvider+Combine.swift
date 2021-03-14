@@ -38,7 +38,7 @@ public extension Reactive where Base: MoyaProviderType {
         }
 
 			let response = Publishers.Create<ProgressResponse, MoyaError> { [weak base] observer in
-            let MoyaCancellableToken = base?.request(token, callbackQueue: callbackQueue, progress: progressBlock(observer)) { result in
+            let moyaCancellableToken = base?.request(token, callbackQueue: callbackQueue, progress: progressBlock(observer)) { result in
                 switch result {
                 case .success:
 									observer.receive(completion: .finished)
@@ -47,7 +47,7 @@ public extension Reactive where Base: MoyaProviderType {
                 }
             }
             return AnyCancellable {
-                MoyaCancellableToken?.cancel()
+                moyaCancellableToken?.cancel()
             }
         }
 
